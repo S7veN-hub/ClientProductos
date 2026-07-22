@@ -16,23 +16,33 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, .2);
 }
 
 .nav_list_menu {
     list-style-type: none;
-    padding-top: 10px;
 }
 
 .nav_list_menu li {
     display: inline-block;
-    margin: 0px 20px;
+    padding: 20px;
+}
+
+.nav_menu_container li.menu_login_container {
+    transition: background-color .4s ease;
+    border-radius: 50%;
+    padding: 8px;
+    margin: 12px;
+}
+
+.menu_login_container:hover {
+    background-color: var(--color-green-card);
 }
 
 .nav_list_menu a {
     text-decoration: none;
     color: var(--color-green-dark);
     font-size: larger;
-    padding-bottom: 2px;
 }
 
 .nav_list_menu a.menu_link:hover {
@@ -42,8 +52,8 @@
 .nav_web_title {
     font-size: x-large;
     font-weight: bolder;
-    color: var(--color-green-dark);
-    padding-top: 5px;
+    color: var(--color-green-kind-dark);
+    padding: 15px;
 }
 
 #nav_search {
@@ -102,6 +112,15 @@
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
+}
+
+span.card_header {
+    font-weight: bolder;
+    color: var(--color-green-kind-dark);
+}
+
+span.card_info {
+    
 }
 
 .footer_container_info {
