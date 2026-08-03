@@ -9,6 +9,7 @@
     --color-green-dark: rgb(32, 44, 33);
     --color-green-kind-dark: rgb(4, 130, 15);
     --color-white: rgb(227, 253, 222);
+    --color-grey: rgb(158, 176, 155);
     --color-green-cream: rgb(205, 255, 195);
 }
 
@@ -121,6 +122,43 @@ span.card_header {
 
 span.card_info {
     
+}
+
+.nav_pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 300;
+}
+
+.nav_pagination_list {
+
+}
+
+.nav_pagination_item {
+    text-decoration: none;
+    color: var(--color-green-dark);
+    font-size: 50px;
+    padding: 0 10px;
+    margin: 10px 10px;
+    background-color: var(--color-green-card);
+    border-radius: 20%;
+}
+
+.nav_pagination_item_disabled {
+    pointer-events: none;
+    text-decoration: none;
+    color: var(--color-white);
+    font-size: 50px;
+    padding: 0 10px;
+    margin: 10px 10px;
+    background-color: var(--color-grey);
+    border-radius: 20%;
+}
+
+.nav_pagination_item:hover {
+    background-color: var(--color-green-kind-dark);
+    color: var(--color-white);
 }
 
 .footer_container_info {

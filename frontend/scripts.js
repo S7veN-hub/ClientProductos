@@ -1,13 +1,79 @@
 import config from './config.js'
 
-addEventListener('load', () => {
-    getProducts()
-    .then(products => printProducts(products))
+let globalNumberPage = 1
+window.addEventListener('load', () => {
+    retrievingProducts(globalNumberPage)
 })
 
-async function getProducts(numberPage=1) {
+let navSearch = document.querySelector('#nav_search')
+navSearch.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        let productName = navSearch.value
+        console.log('Search for: ' + productName)
+        if (productName === '') {
+            globalNumberPage = 1
+            retrievingProducts(globalNumberPage)
+        } else {
+            globalNumberPage = 1
+            retrievingProductsByName(productName, globalNumberPage)
+        }
+    }
+})
+
+let navPaginationPrev = document.querySelector('#nav_pagination_prev')
+navPaginationPrev.addEventListener('click', event => {
+    event.preventDefault();
+    --globalNumberPage
+    let productName = navSearch.value
+    if (productName === '') {
+        retrievingProducts(globalNumberPage)
+    } else {
+        retrievingProductsByName(productName, globalNumberPage)
+    }
+})
+
+let navPaginationNext = document.querySelector('#nav_pagination_next')
+navPaginationNext.addEventListener('click', event => {
+    event.preventDefault();
+    ++globalNumberPage
+    let productName = navSearch.value
+    if (productName === '') {
+        retrievingProducts(globalNumberPage)
+    } else {
+        retrievingProductsByName(productName, globalNumberPage)
+    }
+})
+
+function retrievingProducts(globalNumberPage) {
+    getProducts(globalNumberPage)
+    .then(products => {
+        printProducts(products)
+    })
+}
+
+function retrievingProductsByName(productName, globalNumberPage) {
+    getProductsByName(productName, globalNumberPage)
+    .then(products => {
+        printProducts(products)
+    })
+}
+
+async function getProducts(numberPage) {
     const result = await fetch(config.apiUrl + '/products' + '?numberPage=' + numberPage)
     const data = await result.json()
+    const result2 = await fetch(config.apiUrl + '/products' + '?numberPage=' + (numberPage + 1))
+    const data2 = await result2.json()
+    checkPagination(numberPage, data2)
+    return data
+}
+
+async function getProductsByName(productName, numberPage) {
+    const result = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + numberPage)
+    const data = await result.json()
+    const result2 = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + (numberPage + 1))
+    const data2 = await result2.json()
+    checkPagination(numberPage, data2)
     return data
 }
 
@@ -33,4 +99,28 @@ function printProducts(products) {
         `
     }
     cardContainer.innerHTML = innerHTML
+}
+
+function checkPagination(numberPage, data) {
+    if (numberPage <= 1) {
+        let prevButton = document.querySelector('#nav_pagination_prev')
+        prevButton.className = 'nav_pagination_item_disabled'
+        if (data.length > 0) {
+            let nextButton = document.querySelector('#nav_pagination_next')
+            nextButton.className = 'nav_pagination_item'
+        } else {
+            let nextButton = document.querySelector('#nav_pagination_next')
+            nextButton.className = 'nav_pagination_item_disabled'
+        }
+    } else {
+        let prevButton = document.querySelector('#nav_pagination_prev')
+        prevButton.className = 'nav_pagination_item'
+        if (data.length > 0) {
+            let nextButton = document.querySelector('#nav_pagination_next')
+            nextButton.className = 'nav_pagination_item'
+        } else {
+            let nextButton = document.querySelector('#nav_pagination_next')
+            nextButton.className = 'nav_pagination_item_disabled'
+        }
+    }
 }
