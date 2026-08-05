@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-green-card: rgb(167, 255, 176);
+    --color-green-dark: rgb(32, 44, 33);
+    --color-green-kind-dark: rgb(4, 130, 15);
+    --color-white: rgb(227, 253, 222);
+    --color-grey: rgb(158, 176, 155);
+    --color-green-cream: rgb(205, 255, 195);
+}
+
+h2 {
+    text-align: center;
+    color: var(--color-green-dark);
+    padding-top: 80px;
+    font-size: 40px;
+}
+
+.form_login_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.form_login_container input {
+    width: 300px;
+    height: 40px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-green-cream);
+}
+
+.form_login_container button {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-green-dark);
+    color: var(--color-white);
+    font-size: 16px;
+    cursor: pointer;
+}

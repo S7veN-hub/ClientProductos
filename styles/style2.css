@@ -1,0 +1,66 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-green-card: rgb(167, 255, 176);
+    --color-green-dark: rgb(32, 44, 33);
+    --color-green-kind-dark: rgb(4, 130, 15);
+    --color-white: rgb(227, 253, 222);
+    --color-grey: rgb(158, 176, 155);
+    --color-green-cream: rgb(205, 255, 195);
+}
+
+.card_login_container {
+    margin: auto;
+    width: 40vw;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.card_login_container_image {
+    height: 20vh;
+    background-color: var(--color-green-kind-dark);
+    text-align: center;
+}
+
+.card_login_container_image img {
+    margin-top: 70px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card_login_container_info {
+    min-height: 50vh;
+    background-color: var(--color-white);
+}
+
+.card_login_container_info li {
+    list-style-type: none;
+    text-align: center;
+}
+
+.card_login_container_info ul {
+    padding-top: 35%;
+}
+
+.item_login_container_info {
+    text-decoration: none;
+    color: var(--color-green-dark);
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 30px;
+    width: 300px;
+    background-color: var(--color-green-card);
+}
+
+.item_login_container_info:hover {
+    background-color: var(--color-green-kind-dark);
+    color: var(--color-white);
+}
