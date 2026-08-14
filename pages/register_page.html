@@ -30,11 +30,14 @@
         </div>
         <div class="card_login_container_info">
             <h2>Sign Up</h2>
-            <form action="" class="form_login_container">
-                <input type="text" name="Username" id="Username" placeholder="Username">
-                <input type="email" name="Email" id="Email" placeholder="Email">
-                <input type="password" name="Password" id="Password" placeholder="Password">
-                <button type="submit">Register</button>
+            <form action="" class="form_login_container" id="form_register" name="form_register">
+                <input type="text" name="Username" id="Username" placeholder="Username" required>
+                <input type="email" name="Email" id="Email" placeholder="Email" required>
+                <input type="password" name="Password" id="Password" placeholder="Password" maxlength="15" required>
+                <input type="password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Confirm Password" maxlength="15" required>
+                <button type="submit" class="register_button_disabled">Register</button>
+                <p class="error_message" id="error_message1">The password is not the same.</p>
+                <p class="error_message" id="error_message2">The username or email already exists.</p>
             </form>
         </div>
     </div>

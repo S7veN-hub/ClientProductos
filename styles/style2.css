@@ -21,13 +21,16 @@
 }
 
 .card_login_container_image {
+    position: relative;
     height: 20vh;
     background-color: var(--color-green-kind-dark);
     text-align: center;
 }
 
 .card_login_container_image img {
-    margin-top: 70px;
+    position: absolute;
+    top: 50%;
+    left: 38%;
     width: 150px;
     height: 150px;
     object-fit: cover;

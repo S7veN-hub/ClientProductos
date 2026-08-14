@@ -11,6 +11,7 @@
     --color-white: rgb(227, 253, 222);
     --color-grey: rgb(158, 176, 155);
     --color-green-cream: rgb(205, 255, 195);
+    --color-warning: rgb(169, 73, 13);
 }
 
 h2 {
@@ -39,7 +40,15 @@ h2 {
     background-color: var(--color-green-cream);
 }
 
-.form_login_container button {
+.form_login_container .error_message {
+    display: none;
+    color: var(--color-warning);
+    text-align: center;
+    margin-top: 10px;
+    font-size: large;
+}
+
+.register_button {
     width: 300px;
     height: 40px;
     border: none;
@@ -48,4 +57,37 @@ h2 {
     color: var(--color-white);
     font-size: 16px;
     cursor: pointer;
+}
+
+.register_button_disabled {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-grey);
+    color: var(--color-green-dark);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.login_button {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-green-dark);
+    color: var(--color-white);
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login_button_disabled {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--color-grey);
+    color: var(--color-green-dark);
+    font-size: 16px;
+    pointer-events: none;
 }
