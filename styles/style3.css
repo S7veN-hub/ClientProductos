@@ -48,6 +48,14 @@ h2 {
     font-size: large;
 }
 
+.form_login_container .success_message {
+    display: none;
+    color: var(--color-green-kind-dark);
+    text-align: center;
+    margin-top: 10px;
+    font-size: large;
+}
+
 .register_button {
     width: 300px;
     height: 40px;

@@ -11,7 +11,6 @@ if (navSearch) {
         if (event.key === 'Enter') {
             event.preventDefault();
             let productName = navSearch.value
-            console.log('Search for: ' + productName)
             if (productName === '') {
                 globalNumberPage = 1
                 retrievingProducts(globalNumberPage)
@@ -58,6 +57,8 @@ let formRegisterInputPassword = document.forms['form_register']? document.forms[
 let formRegisterInputConfirmPassword = document.forms['form_register']? document.forms['form_register']['ConfirmPassword'] : null
 let errorMessage1 = document.querySelector('#error_message1')
 let errorMessage2 = document.querySelector('#error_message2')
+let errorMessage4 = document.querySelector('#error_message4')
+let successMessage1 = document.querySelector('#success_message1')
 let formRegisterButton = document.querySelector('#form_register button')
 
 if (formRegisterInputUsername) formRegisterInputUsername.addEventListener('input', validateRegisterForm)
@@ -98,12 +99,25 @@ if (formRegister) formRegister.addEventListener('submit', async event => {
             })
         })
         const data2 = await response2.json()
+        if (data2.isSuccess) {
+            successMessage1.style.display = 'block'
+            errorMessage4.style.display = 'none'
+            formRegisterInputUsername.value = ''
+            formRegisterInputEmail.value = ''
+            formRegisterInputPassword.value = ''
+            formRegisterInputConfirmPassword.value = ''
+            formRegisterButton.className = 'register_button_disabled'
+        } else {
+            errorMessage4.style.display = 'block'
+            successMessage1.style.display = 'none'
+        }
     }
 })
 
 let formLogin = document.forms['form_login']
 let formLoginInputUsername = document.forms['form_login']? document.forms['form_login']['Username'] : null
 let formLoginInputPassword = document.forms['form_login']? document.forms['form_login']['Password'] : null
+let errorMessage3 = document.querySelector('#error_message3')
 let formLoginButton = document.querySelector('#form_login button')
 
 if (formLogin) formLogin.addEventListener('submit', async event => {
@@ -121,7 +135,13 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
         })
     })
     const data = await response.json()
-    console.log(data)
+    if (data.length > 0) {
+        errorMessage3.style.display = 'none'
+        // window.location.href = '../index.html'
+        console.log('Login successful: ' + data[0].name)
+    } else {
+        errorMessage3.style.display = 'block'
+    }
 })
 if (formLoginInputUsername) formLoginInputUsername.addEventListener('input', validateLoginForm)
 if (formLoginInputPassword) formLoginInputPassword.addEventListener('input', validateLoginForm)
@@ -210,7 +230,6 @@ function checkPagination(numberPage, data) {
 }
 
 function validateRegisterForm() {
-    console.log('Validating register form...')
     if (formRegisterInputUsername.value !== '' && formRegisterInputEmail.value !== '' && formRegisterInputPassword.value !== '' && formRegisterInputConfirmPassword.value !== '') {
         if (formRegisterInputPassword.value === formRegisterInputConfirmPassword.value) {
             formRegisterButton.className = 'register_button'
@@ -226,7 +245,6 @@ function validateRegisterForm() {
 }
 
 function validateLoginForm() {
-    console.log('Validating login form...')
     if (formLoginInputUsername.value !== '' && formLoginInputPassword.value !== '') {
         formLoginButton.className = 'login_button'
     } else {
