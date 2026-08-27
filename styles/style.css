@@ -62,7 +62,7 @@
     height: 25px;
 }
 
-.main_section {
+.main_section, .main_section_history {
     min-height: 80vh;
     padding-top: 20px;
 }

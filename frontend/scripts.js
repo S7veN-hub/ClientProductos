@@ -2,7 +2,12 @@ import config from './config.js'
 
 let globalNumberPage = 1
 window.addEventListener('load', () => {
-    retrievingProducts(globalNumberPage)
+    const page = document.body.getAttribute('data-page')
+    switch (page) {
+        case 'home':
+            retrievingProducts(globalNumberPage)
+            break
+    }
 })
 
 let navSearch = document.querySelector('#nav_search')
@@ -137,8 +142,8 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
     const data = await response.json()
     if (data.length > 0) {
         errorMessage3.style.display = 'none'
-        // window.location.href = '../index.html'
-        console.log('Login successful: ' + data[0].name)
+        window.location.href = '../index.html'
+        // console.log('Login successful: ' + data[0].name)
     } else {
         errorMessage3.style.display = 'block'
     }

@@ -5,35 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../styles/style.css">
-    <link rel="stylesheet" href="../styles/style2.css">
     <script src="../frontend/scripts.js" type="module"></script>
     <title>PlantYshop</title>
 </head>
-<body data-page="menu_login">
+<body data-page="history">
     <nav class="nav_menu_container">
         <div class="nav_web_title">PlantYshop</div>
         <ul class="nav_list_menu">
             <li><a class="menu_link" href="../index.html">Home</a></li>
             <li><a class="menu_link" href="">Contact</a></li>
+            <li><a class="menu_link" href="./history.html">History</a></li>
             <li>
                 <input type="text" name="" id="nav_search" placeholder="Search...">
             </li>
             <li class="menu_login_container">
-                <a class="menu_login" href="./card_menu_login.html"><i class="fa-solid fa-user"></i></a>
+                <a class="menu_login" href="../pages/card_menu_login.html"><i class="fa-solid fa-user"></i></a>
             </li>
         </ul>
     </nav>
-    <div class="card_login_container">
-        <div class="card_login_container_image">
-            <img src="../img/login_image.webp" alt="Login Image">
-        </div>
-        <div class="card_login_container_info">
-            <ul>
-                <li><a href="./login_page.html" class="item_login_container_info">Login</a></li>
-                <li><a href="./register_page.html" class="item_login_container_info">Register</a></li>
-            </ul>
-        </div>
-    </div>
+    <section class="main_section_history">
+        <section class="cards_section_container_history" id="main_card_section_container_history">
+            <p>To see your purchase history, please, log in.</p>
+        </section>
+    </section>
+    <nav class="nav_pagination">
+        <span><a class="nav_pagination_item" id="nav_pagination_prev" href="">&lt;</a></span>
+        <ul class="nav_pagination_list">
+
+        </ul>
+        <span><a class="nav_pagination_item" id="nav_pagination_next" href="">&gt;</a></span>
+    </nav>
     <footer class="footer_container">
         <div class="footer_container_info">
             My website from S7veN
