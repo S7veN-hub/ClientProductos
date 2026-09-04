@@ -214,9 +214,11 @@ async function getProductsByName(productName, numberPage) {
 }
 
 async function getProductHistory(numberPage) {
-    const result = await fetch(config.apiUrl + '/history' + '?numberPage=' + numberPage)
+    const userResult = await fetch(config.apiUrl + '/checking_permission' + '/check_user')
+    const userData = (await userResult.json())[0]
+    const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.user_id}` + '?numberPage=' + numberPage)
     const data = await result.json()
-    const result2 = await fetch(config.apiUrl + '/history' + '?numberPage=' + (numberPage + 1))
+    const result2 = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.user_id}` + '?numberPage=' + (numberPage + 1))
     const data2 = await result2.json()
     checkPaginationHistory(numberPage, data2)
     return data
