@@ -1,11 +1,15 @@
 import config from './config.js'
 
 let globalNumberPage = 1
+let globalHistoryNumberPage = 1
 window.addEventListener('load', () => {
     const page = document.body.getAttribute('data-page')
     switch (page) {
         case 'home':
             retrievingProducts(globalNumberPage)
+            break
+        case 'history':
+            retrievingProductHistory(globalHistoryNumberPage)
             break
     }
 })
@@ -52,6 +56,24 @@ if (navPaginationNext) {
         } else {
             retrievingProductsByName(productName, globalNumberPage)
         }
+    })
+}
+
+let navPaginationHistoryPrev = document.querySelector('#nav_history_pagination_prev')
+if (navPaginationHistoryPrev) {
+    navPaginationHistoryPrev.addEventListener('click', event => {
+        event.preventDefault();
+        --globalHistoryNumberPage
+        retrievingProductHistory(globalHistoryNumberPage)
+    })
+}
+
+let navPaginationHistoryNext = document.querySelector('#nav_history_pagination_next')
+if (navPaginationHistoryNext) {
+    navPaginationHistoryNext.addEventListener('click', event => {
+        event.preventDefault();
+        ++globalHistoryNumberPage
+        retrievingProductHistory(globalHistoryNumberPage)
     })
 }
 
@@ -166,6 +188,13 @@ function retrievingProductsByName(productName, globalNumberPage) {
     })
 }
 
+function retrievingProductHistory() {
+    getProductHistory(globalHistoryNumberPage)
+    .then(products => {
+        printHistoryProducts(products)
+    })
+}
+
 async function getProducts(numberPage) {
     const result = await fetch(config.apiUrl + '/products' + '?numberPage=' + numberPage)
     const data = await result.json()
@@ -184,9 +213,44 @@ async function getProductsByName(productName, numberPage) {
     return data
 }
 
+async function getProductHistory(numberPage) {
+    const result = await fetch(config.apiUrl + '/history' + '?numberPage=' + numberPage)
+    const data = await result.json()
+    const result2 = await fetch(config.apiUrl + '/history' + '?numberPage=' + (numberPage + 1))
+    const data2 = await result2.json()
+    checkPaginationHistory(numberPage, data2)
+    return data
+}
+
 function printProducts(products) {
     let innerHTML = ''
     let cardContainer = document.querySelector('#main_card_section_container')
+    if (cardContainer) {
+        for (const product of products) {
+            innerHTML += `
+            <div class="card_container">
+                <div class="card_container_image">
+                    <img src="${config.apiUrl}${product.image}" alt="${product.name}">
+                </div>
+                <div class="card_container_info">
+                    <ul>
+                        <li class="li_name"><span class="card_header">Name: </span><span class="card_info">${product.name}</span></li>
+                        <li class="li_price"><span class="card_header">Price: </span><span class="card_info">${product.price}${config.currencyMap.get(product.currency)}</span></li>
+                        <li class="li_discount"><span class="card_header">Discount: </span><span class="card_info">${product.discount > 0 ? `${product.discount}%` : config.discountDefault}</span></li>
+                        <li class="li_stock"><span class="card_header">Stock: </span><span class="card_info">${product.stock}</span></li>
+                        <li class="li_description"><span class="card_header">Description: </span><span class="card_info">${product.description}</span></li>
+                    </ul>
+                </div>
+            </div>
+            `
+        }
+        cardContainer.innerHTML = innerHTML
+    }
+}
+
+function printHistoryProducts(products) {
+    let innerHTML = ''
+    let cardContainer = document.querySelector('#main_card_section_container_history')
     if (cardContainer) {
         for (const product of products) {
             innerHTML += `
@@ -229,6 +293,30 @@ function checkPagination(numberPage, data) {
             if (nextButton) nextButton.className = 'nav_pagination_item'
         } else {
             let nextButton = document.querySelector('#nav_pagination_next')
+            if (nextButton) nextButton.className = 'nav_pagination_item_disabled'
+        }
+    }
+}
+
+function checkPaginationHistory(numberPage, data) {
+    if (numberPage <= 1) {
+        let prevButton = document.querySelector('#nav_history_pagination_prev')
+        if (prevButton) prevButton.className = 'nav_pagination_item_disabled'
+        if (data.length > 0) {
+            let nextButton = document.querySelector('#nav_history_pagination_next')
+            if (nextButton) nextButton.className = 'nav_pagination_item'
+        } else {
+            let nextButton = document.querySelector('#nav_history_pagination_next')
+            if (nextButton) nextButton.className = 'nav_pagination_item_disabled'
+        }
+    } else {
+        let prevButton = document.querySelector('#nav_history_pagination_prev')
+        if (prevButton) prevButton.className = 'nav_pagination_item'
+        if (data.length > 0) {
+            let nextButton = document.querySelector('#nav_history_pagination_next')
+            if (nextButton) nextButton.className = 'nav_pagination_item'
+        } else {
+            let nextButton = document.querySelector('#nav_history_pagination_next')
             if (nextButton) nextButton.className = 'nav_pagination_item_disabled'
         }
     }
