@@ -28,9 +28,7 @@
 }
 
 .card_login_container_image img {
-    position: absolute;
-    top: 50%;
-    left: 38%;
+    margin-top: 10vh;
     width: 150px;
     height: 150px;
     object-fit: cover;

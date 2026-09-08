@@ -1,8 +1,8 @@
 import config from './config.js'
-
 let globalNumberPage = 1
 let globalHistoryNumberPage = 1
 window.addEventListener('load', () => {
+    checkUserLoginIcon()
     const page = document.body.getAttribute('data-page')
     switch (page) {
         case 'home':
@@ -10,6 +10,12 @@ window.addEventListener('load', () => {
             break
         case 'history':
             retrievingProductHistory(globalHistoryNumberPage)
+            break
+        case 'login':
+            break
+        case 'register':
+            break
+        case 'menu_login':
             break
     }
 })
@@ -100,6 +106,7 @@ if (formRegister) formRegister.addEventListener('submit', async event => {
     const role = 'user'
     const response = await fetch(config.apiUrl + '/register/check_user', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -115,6 +122,7 @@ if (formRegister) formRegister.addEventListener('submit', async event => {
         errorMessage2.style.display = 'none'
         const response2 = await fetch(config.apiUrl + '/register/register_user', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -153,6 +161,7 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
     const password = formLoginInputPassword.value
     const response = await fetch(config.apiUrl + '/login/login_user', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -164,9 +173,8 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
     const data = await response.json()
     if (data.length > 0) {
         errorMessage3.style.display = 'none'
-        window.location.href = '../index.html'
-        // console.log('Login successful: ' + data[0].name)
-    } else {
+        window.location.href = config.pageURL
+    } else {console.log('error')
         errorMessage3.style.display = 'block'
     }
 })
@@ -196,38 +204,76 @@ function retrievingProductHistory() {
 }
 
 async function getProducts(numberPage) {
-    const result = await fetch(config.apiUrl + '/products' + '?numberPage=' + numberPage)
+    const result = await fetch(config.apiUrl + '/products' + '?numberPage=' + numberPage, {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data = await result.json()
-    const result2 = await fetch(config.apiUrl + '/products' + '?numberPage=' + (numberPage + 1))
+    const result2 = await fetch(config.apiUrl + '/products' + '?numberPage=' + (numberPage + 1), {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data2 = await result2.json()
     checkPagination(numberPage, data2)
     return data
 }
 
 async function getProductsByName(productName, numberPage) {
-    const result = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + numberPage)
+    const result = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + numberPage, {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data = await result.json()
-    const result2 = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + (numberPage + 1))
+    const result2 = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + (numberPage + 1), {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data2 = await result2.json()
     checkPagination(numberPage, data2)
     return data
 }
 
 async function getProductHistory(numberPage) {
-    const userResult = await fetch(config.apiUrl + '/checking_permission' + '/check_user')
-    const userData = (await userResult.json())[0]
-    const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.user_id}` + '?numberPage=' + numberPage)
+    const userResult = await fetch(config.apiUrl + '/checking_permission' + '/check_user', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    const userData = await userResult.json()
+    const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData[0].user_id}` + '?numberPage=' + numberPage, {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data = await result.json()
-    const result2 = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.user_id}` + '?numberPage=' + (numberPage + 1))
+    const result2 = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData[0].user_id}` + '?numberPage=' + (numberPage + 1), {
+        method: 'GET',
+        credentials: 'include'
+    })
     const data2 = await result2.json()
     checkPaginationHistory(numberPage, data2)
     return data
+}
+
+async function checkUserLoginIcon() {
+    const userLoginIcon = document.querySelector('.menu_login_container .menu_login i')
+    const userResult = await fetch(config.apiUrl + '/checking_permission' + '/check_user', {
+        method: 'GET',
+        credentials: 'include'
+    })
+    const userData = (await userResult.json())[0]
+    if (userLoginIcon) {
+        if (userData) {
+            userLoginIcon.className = 'fa-solid fa-user-pen'
+        } else {
+            userLoginIcon.className = 'fa-solid fa-user'
+        }
+    }
 }
 
 function printProducts(products) {
     let innerHTML = ''
     let cardContainer = document.querySelector('#main_card_section_container')
     if (cardContainer) {
+        innerHTML = products.length === 0 ? "There are no products to show" : ""
         for (const product of products) {
             innerHTML += `
             <div class="card_container">
@@ -254,6 +300,7 @@ function printHistoryProducts(products) {
     let innerHTML = ''
     let cardContainer = document.querySelector('#main_card_section_container_history')
     if (cardContainer) {
+        innerHTML = products.length === 0 ? "You don't have any products to show" : ""
         for (const product of products) {
             innerHTML += `
             <div class="card_container">
