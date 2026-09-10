@@ -171,10 +171,10 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
         })
     })
     const data = await response.json()
-    if (data.length > 0) {
+    if (data.isSuccess) {
         errorMessage3.style.display = 'none'
         window.location.href = config.pageURL
-    } else {console.log('error')
+    } else {
         errorMessage3.style.display = 'block'
     }
 })
@@ -214,8 +214,8 @@ async function getProducts(numberPage) {
         credentials: 'include'
     })
     const data2 = await result2.json()
-    checkPagination(numberPage, data2)
-    return data
+    checkPagination(numberPage, data2.data)
+    return data.data
 }
 
 async function getProductsByName(productName, numberPage) {
@@ -229,8 +229,8 @@ async function getProductsByName(productName, numberPage) {
         credentials: 'include'
     })
     const data2 = await result2.json()
-    checkPagination(numberPage, data2)
-    return data
+    checkPagination(numberPage, data2.data)
+    return data.data
 }
 
 async function getProductHistory(numberPage) {
@@ -239,18 +239,19 @@ async function getProductHistory(numberPage) {
         credentials: 'include'
     })
     const userData = await userResult.json()
-    const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData[0].user_id}` + '?numberPage=' + numberPage, {
+    if (userData.isSuccess === false) return null
+    const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.data[0].user_id}` + '?numberPage=' + numberPage, {
         method: 'GET',
         credentials: 'include'
     })
     const data = await result.json()
-    const result2 = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData[0].user_id}` + '?numberPage=' + (numberPage + 1), {
+    const result2 = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.data[0].user_id}` + '?numberPage=' + (numberPage + 1), {
         method: 'GET',
         credentials: 'include'
     })
     const data2 = await result2.json()
-    checkPaginationHistory(numberPage, data2)
-    return data
+    checkPaginationHistory(numberPage, data2.data)
+    return data.data
 }
 
 async function checkUserLoginIcon() {
@@ -259,9 +260,9 @@ async function checkUserLoginIcon() {
         method: 'GET',
         credentials: 'include'
     })
-    const userData = (await userResult.json())[0]
+    const userData = await userResult.json()
     if (userLoginIcon) {
-        if (userData) {
+        if (userData.isSuccess) {
             userLoginIcon.className = 'fa-solid fa-user-pen'
         } else {
             userLoginIcon.className = 'fa-solid fa-user'
@@ -272,7 +273,7 @@ async function checkUserLoginIcon() {
 function printProducts(products) {
     let innerHTML = ''
     let cardContainer = document.querySelector('#main_card_section_container')
-    if (cardContainer) {
+    if (cardContainer && products) {
         innerHTML = products.length === 0 ? "There are no products to show" : ""
         for (const product of products) {
             innerHTML += `
@@ -299,7 +300,7 @@ function printProducts(products) {
 function printHistoryProducts(products) {
     let innerHTML = ''
     let cardContainer = document.querySelector('#main_card_section_container_history')
-    if (cardContainer) {
+    if (cardContainer && products) {
         innerHTML = products.length === 0 ? "You don't have any products to show" : ""
         for (const product of products) {
             innerHTML += `
