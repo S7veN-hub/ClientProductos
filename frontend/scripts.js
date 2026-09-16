@@ -2,7 +2,6 @@ import config from './config.js'
 let globalNumberPage = 1
 let globalHistoryNumberPage = 1
 window.addEventListener('load', () => {
-    checkUserLoginIcon()
     const page = document.body.getAttribute('data-page')
     switch (page) {
         case 'home':
@@ -12,10 +11,13 @@ window.addEventListener('load', () => {
             retrievingProductHistory(globalHistoryNumberPage)
             break
         case 'login':
+            checkUserLoginIcon()
             break
         case 'register':
+            checkUserLoginIcon()
             break
         case 'menu_login':
+            checkMenuLogin()
             break
     }
 })
@@ -181,7 +183,6 @@ if (formLogin) formLogin.addEventListener('submit', async event => {
 if (formLoginInputUsername) formLoginInputUsername.addEventListener('input', validateLoginForm)
 if (formLoginInputPassword) formLoginInputPassword.addEventListener('input', validateLoginForm)
 
-
 function retrievingProducts(globalNumberPage) {
     getProducts(globalNumberPage)
     .then(products => {
@@ -204,6 +205,7 @@ function retrievingProductHistory() {
 }
 
 async function getProducts(numberPage) {
+    await checkUserLoginIcon()
     const result = await fetch(config.apiUrl + '/products' + '?numberPage=' + numberPage, {
         method: 'GET',
         credentials: 'include'
@@ -219,6 +221,7 @@ async function getProducts(numberPage) {
 }
 
 async function getProductsByName(productName, numberPage) {
+    await checkUserLoginIcon()
     const result = await fetch(config.apiUrl + '/products' + '/search_product' + '?product_name=' + productName + '&numberPage=' + numberPage, {
         method: 'GET',
         credentials: 'include'
@@ -234,11 +237,7 @@ async function getProductsByName(productName, numberPage) {
 }
 
 async function getProductHistory(numberPage) {
-    const userResult = await fetch(config.apiUrl + '/checking_permission' + '/check_user', {
-        method: 'GET',
-        credentials: 'include'
-    })
-    const userData = await userResult.json()
+    const userData = await checkUserLoginIcon()
     if (userData.isSuccess === false) return null
     const result = await fetch(config.apiUrl + '/products' + '/get_product_history' + `/${userData.data[0].user_id}` + '?numberPage=' + numberPage, {
         method: 'GET',
@@ -268,6 +267,7 @@ async function checkUserLoginIcon() {
             userLoginIcon.className = 'fa-solid fa-user'
         }
     }
+    return userData
 }
 
 function printProducts(products) {
@@ -345,6 +345,43 @@ function checkPagination(numberPage, data) {
             let nextButton = document.querySelector('#nav_pagination_next')
             if (nextButton) nextButton.className = 'nav_pagination_item_disabled'
         }
+    }
+}
+
+async function checkMenuLogin() {
+    const userData = await checkUserLoginIcon()
+    if (userData.isSuccess) {
+        const cardLoginConainerH2 = document.querySelector('.card_login_container_info h2')
+        const cardLoginConainerUl = document.querySelector('.card_login_container_info ul')
+        if (cardLoginConainerH2) cardLoginConainerH2.innerHTML = `Welcome, ${userData.data[0].name}`
+        if (cardLoginConainerUl) cardLoginConainerUl.innerHTML = `
+            <li><a href="" class="item_login_container_info" id="logout">Logout</a></li>
+        `
+        let logoutButton = document.querySelector('#logout');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', async event => {
+                event.preventDefault();
+                const response = await fetch(config.apiUrl + '/login/logout_user', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const data = await response.json()
+                if (data.isSuccess) {
+                    window.location.href = config.pageURL
+                } else {
+                    alert('Error to logout, please try again or contact with the administrator.')
+                }
+            })
+        }
+    } else {
+        const cardLoginConainerUl = document.querySelector('.card_login_container_info ul')
+        if (cardLoginConainerUl) cardLoginConainerUl.innerHTML = `
+            <li><a href="./login_page.html" class="item_login_container_info">Login</a></li>
+            <li><a href="./register_page.html" class="item_login_container_info">Register</a></li>
+        `
     }
 }
 
